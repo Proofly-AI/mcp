@@ -1,6 +1,6 @@
 {
   "name": "proofly-mcp",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Proofly MCP Client for Claude Desktop and other MCP-compatible clients",
   "main": "server.js",
   "type": "module",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/proofly-mcp.git"
+    "url": "git+https://github.com/Proofly-AI/mcp.git"
   },
   "keywords": [
     "proofly",
