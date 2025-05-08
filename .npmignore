@@ -1,0 +1,6 @@
+# Ignore everything by default
+*
+# But NOT these files:
+!server.js
+!package.json
+!README.md

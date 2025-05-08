@@ -1,0 +1,43 @@
+{
+  "name": "proofly-mcp",
+  "version": "1.2.1",
+  "description": "Proofly MCP Client for Claude Desktop and other MCP-compatible clients",
+  "main": "server.js",
+  "type": "module",
+  "bin": {
+    "proofly-mcp": "server.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "inspector": "npx @modelcontextprotocol/inspector server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "axios": "^1.6.8",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/proofly-mcp.git"
+  },
+  "keywords": [
+    "proofly",
+    "mcp",
+    "deepfake",
+    "ai",
+    "model context protocol"
+  ],
+  "author": "Ntty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Proofly-AI/"
+  },
+  "homepage": "https://github.com/Proofly-AI/",
+  "files": [
+    "server.js",
+    "README.md"
+  ]
+}
