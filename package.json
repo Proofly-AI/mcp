@@ -1,6 +1,6 @@
 {
   "name": "proofly-mcp",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Proofly MCP Client for Claude Desktop and other MCP-compatible clients",
   "main": "server.js",
   "type": "module",
