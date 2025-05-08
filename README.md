@@ -7,6 +7,10 @@ This document describes two ways to integrate Proofly's deepfake detection capab
 
 Both integration methods ultimately use the Proofly API (`https://api.proofly.ai`) for analysis.
 
+<a href="https://glama.ai/mcp/servers/@Proofly-AI/mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@Proofly-AI/mcp/badge" alt="Proofly Integration MCP server" />
+</a>
+
 ---
 
 ## 1. Using the Hosted MCP Server (`https://mcp.proofly.ai`)
