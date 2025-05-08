@@ -30,12 +30,12 @@
     "ai",
     "model context protocol"
   ],
-  "author": "Ntty",
+  "author": "Proofly AI",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Proofly-AI/"
+    "url": "https://github.com/Proofly-AI/mcp/issues"
   },
-  "homepage": "https://github.com/Proofly-AI/",
+  "homepage": "https://github.com/Proofly-AI/mcp",
   "files": [
     "server.js",
     "README.md"
