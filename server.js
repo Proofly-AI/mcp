@@ -41,7 +41,7 @@ function logInfo(...args) {
   console.error(`[${new Date().toISOString()}] [ProoflyMCPInfo]`, ...args);
 }
 
-// Вспомогательная функция для определения Content-Type по имени файла
+// Helper function to determine Content-Type by filename extension
 function getContentTypeFromFilename(filename) {
   const extension = filename.split('.').pop().toLowerCase();
   const contentTypes = {
@@ -54,22 +54,22 @@ function getContentTypeFromFilename(filename) {
     'tiff': 'image/tiff',
     'tif': 'image/tiff'
   };
-  return contentTypes[extension] || 'application/octet-stream'; // По умолчанию, если не jpeg
+  return contentTypes[extension] || 'application/octet-stream'; 
 }
 
-// Вспомогательная функция для определения вердикта по вероятности
+// Helper function to determine verdict based on probability
 function getVerdict(probability) {
   if (probability === null || typeof probability === 'undefined') return "Uncertain (no score)";
-  if (probability > 0.7) {
+  if (probability > 0.8) {
     return "Likely Real";
-  } else if (probability < 0.3) {
+  } else if (probability < 0.2) {
     return "Likely Fake";
   } else {
     return "Uncertain";
   }
 }
 
-// Вспомогательная функция для форматирования результатов в человекочитаемый вид
+// Helper function to format results in a human-readable form
 function formatResultsToHumanReadable(result) {
   if (!result) return "Error: No result to format.";
 
@@ -93,7 +93,6 @@ function formatResultsToHumanReadable(result) {
       if (typeof face.ansamble !== 'undefined' && face.ansamble !== null) {
         output += `* Probability "real": ${(face.ansamble * 100).toFixed(2)}%, "fake": ${(100 - face.ansamble * 100).toFixed(2)}%\n`;
       }
-      // В некоторых ответах модели могут отсутствовать, добавим проверку
       if (face.is_real_model_1 !== undefined) { 
         output += `* Individual model results:\n`;
         for (let i = 1; i <= 10; i++) {
@@ -111,14 +110,14 @@ function formatResultsToHumanReadable(result) {
       }
       output += `\n`;
     });
-  } else if (result.status === 'done' || result.status === 'completed') { // Если статус done, но лиц нет
+  } else if (result.status === 'done' || result.status === 'completed') { // If status is done but no faces
     output += `* No faces detected in the image\n\n`;
-  } else if (!result.message) { // Если нет сообщения и нет лиц (на всякий случай)
+  } else if (!result.message) { // If there is no message and no faces (just in case)
     output += `* No specific face data available or an issue occurred during processing.\n\n`;
   }
   
-  // Убираем рекламную строчку, как обсуждали, она не нужна в MCP клиенте
-  // output += `For unlimited speed access and additional features, register at check.proofly.ai\n`;
+
+  output += `For unlimited speed access and additional features, register at check.proofly.ai\n`;
   return output;
 }
 
@@ -409,7 +408,6 @@ class ProoflyMcpServer {
         await new Promise(res => setTimeout(res, PROOFLY_CONFIG.retryInterval));
         attempts++;
         logInfo(`Checking status for UUID ${uuid}, attempt ${attempts}`);
-        
         const statusResp = await axios.get(`${PROOFLY_CONFIG.baseUrl}/api/${uuid}/status`);
         status = statusResp.data.status;
         logInfo(`Status: ${status}`);
@@ -419,11 +417,10 @@ class ProoflyMcpServer {
       }
 
       if (status !== 'done' && status !== 'completed' && !analysisResult) { 
-        // Если статус 'no_faces_found' или подобный, это тоже может быть финальным успешным статусом
         if (status === 'no_faces_found' || status === 'no faces found') {
             logInfo('No faces found in the image as per status update.');
             analysisResult = { 
-                uuid: uuid, // Добавим uuid в результат для консистентности
+                uuid: uuid, // Add uuid to result for consistency
                 status: 'no_faces_found', 
                 message: 'No faces detected in the image.',
                 faces: [],
@@ -475,7 +472,7 @@ class ProoflyMcpServer {
       if (format === 'json') {
         return { content: [{ type: "text", text: JSON.stringify(statusData, null, 2) }] }; 
       } else {
-        // Простое текстовое представление статуса
+        // Simple text representation of the status
         let output = `**Session Status for ${sessionUuid}:**\n`;
         output += `* Status: ${statusData.status || 'N/A'}\n`;
         if (statusData.message) {
@@ -492,7 +489,7 @@ class ProoflyMcpServer {
         logError("Error response data:", error.response.data);
         logError("Error response status:", error.response.status);
       }
-      // Если API возвращает 404 для неизвестного UUID, это может быть ожидаемо
+      // If API returns 404 for unknown UUID, this may be expected
       if (error.response && error.response.status === 404) {
         throw new McpError(ErrorCode.NotFound, `Session with UUID ${sessionUuid} not found.`);
       }
@@ -523,8 +520,7 @@ class ProoflyMcpServer {
       if (format === 'json') {
         return { content: [{ type: "text", text: JSON.stringify(specificFace, null, 2) }] }; 
       } else {
-        // Используем и модифицируем formatResultsToHumanReadable или создадим новую функцию
-        // для форматирования только одного лица
+        // Format only a single face
         let output = `**Details for Face ${faceIndex + 1} (Session: ${sessionUuid}):**\n`;
         const faceVerdict = getVerdict(specificFace.ansamble);
         output += `* Verdict: **${faceVerdict}**\n`;
